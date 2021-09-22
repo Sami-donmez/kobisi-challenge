@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Company;
+use App\Models\CompanyPackage;
 use App\Models\CompanyPayment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -33,7 +34,8 @@ class PaymentJob implements ShouldQueue
     public function handle()
     {
         $company = Company::findOrFail($this->company);
-        $package = $company->package;
+        $package = CompanyPackage::where('company_id',$this->company)->first();
+
         $payments = CompanyPayment::where('company_id',$company->id)->where('status','1')->count();
         if ($payments >= 1) {
             logger()->warning('odeme daha önceden alınmıştır.');
@@ -43,13 +45,12 @@ class PaymentJob implements ShouldQueue
 
         $payment = new CompanyPayment();
         $payment->company_id = $company->id;
-        $payment->amount = $package->amount;
+        $payment->amount = $package->package->amount;
         $payment->status = $company->status;
         $payment->save();
 
         if ($status == 1) {
             $package->status = 1;
-            $package->transaction_id = $payment->id;
             $package->save();
         }else {
             $payments=CompanyPayment::where('company_id',$company->id)->count();

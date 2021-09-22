@@ -56,7 +56,8 @@ class CompanyController extends ApiController
         $companyPackage->start_date = Carbon::today()->format('Y-m-d');
         $days = $package->type == 'mothly' ? 30 : 365;
         $companyPackage->stop_date = Carbon::today()->addDays($days)->format('Y-m-d');
-        $companyPackage->totalAmount = $package->amount;
+        $companyPackage->total_amount = $package->amount;
+        $companyPackage->status = 1;
         if ($companyPackage->save()) {
             dispatch(new PaymentJob($companyPackage->company->id));
             return new  CompanyPackageResource($companyPackage);

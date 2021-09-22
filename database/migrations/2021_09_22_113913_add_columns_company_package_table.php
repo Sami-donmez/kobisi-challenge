@@ -15,7 +15,6 @@ class AddColumnsCompanyPackageTable extends Migration
     {
         Schema::table('company_packages', function (Blueprint $table) {
             $table->tinyInteger('status')->comment(' 0 => bekliyor 1=> ödeme tamamlandı 2=> ödeme iptal edildi');
-            $table->foreignId('transaction_id')->constrained()->nullable()->on('company_payments')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,8 +27,6 @@ class AddColumnsCompanyPackageTable extends Migration
     {
         Schema::table('company_packages', function (Blueprint $table) {
             $table->dropColumn('status');
-            $table->dropForeign('transaction_id');
-            $table->dropColumn('transaction_id');
         });
     }
 }
