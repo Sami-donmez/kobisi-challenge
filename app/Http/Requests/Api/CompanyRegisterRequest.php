@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Rules\PasswordRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CompanyRegisterRequest extends FormRequest
@@ -13,7 +14,7 @@ class CompanyRegisterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,16 @@ class CompanyRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "name" => "required",
+            "lastname" => "required",
+            "company_name" => "required",
+            "site_url" => "required",
+            "email" => "required|email|unique:companies",
+            "password" => [
+                "required",
+                "min:6",
+                new PasswordRule()
+            ],
         ];
     }
 }

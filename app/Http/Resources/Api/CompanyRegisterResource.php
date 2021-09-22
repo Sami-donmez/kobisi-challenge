@@ -14,6 +14,10 @@ class CompanyRegisterResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'status'=>"ok",
+            'company_id'=>$this->id,
+            'token'=>""
+        ];
     }
 }
