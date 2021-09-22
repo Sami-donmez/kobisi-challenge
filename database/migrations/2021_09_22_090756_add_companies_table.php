@@ -22,6 +22,7 @@ class AddCompaniesTable extends Migration
             $table->string('password');
             $table->string('site_url');
             $table->string('access_token');
+            $table->tinyInteger('status')->comment(' 0 =>pasif 1=> aktif');
             $table->softDeletes();
             $table->timestamps();
         });

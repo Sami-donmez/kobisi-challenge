@@ -15,6 +15,9 @@ class AddCompanyPaymentsTable extends Migration
     {
         Schema::create('company_payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained()->on('companies')->references('id')->cascadeOnDelete()->cascadeOnDelete();
+            $table->double('amount');
+            $table->tinyInteger('status');
             $table->softDeletes();
             $table->timestamps();
         });

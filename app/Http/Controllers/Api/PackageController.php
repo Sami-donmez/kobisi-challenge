@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
-    //
+    public function list()
+    {
+        return [];
+    }
 }

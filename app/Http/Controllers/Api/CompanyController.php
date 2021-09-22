@@ -6,6 +6,7 @@ use App\Http\Requests\Api\CompanyPackageRequest;
 use App\Http\Requests\Api\CompanyRegisterRequest;
 use App\Http\Resources\Api\CompanyPackageResource;
 use App\Http\Resources\Api\CompanyRegisterResource;
+use App\Jobs\PaymentJob;
 use App\Models\Company;
 use App\Models\CompanyPackage;
 use App\Models\Package;
@@ -32,6 +33,7 @@ class CompanyController extends ApiController
        $company->access_token = "";
 
        if ($company->save()) {
+           PaymentJob::dispatch($company->id);
            return CompanyRegisterResource::collection($company);
        }else{
            return $this->errorResponse('Şirket Kaydı Yapılamadı');
