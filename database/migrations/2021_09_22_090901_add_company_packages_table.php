@@ -17,7 +17,7 @@ class AddCompanyPackagesTable extends Migration
             $table->id();
             $table->softDeletes();
             $table->foreignId('company_id')->constrained()->on('companies')->references('id')->cascadeOnDelete()->cascadeOnDelete();
-            $table->foreignId('package_id')->constrained()->on('companies')->references('id')->cascadeOnDelete()->cascadeOnDelete();
+            $table->foreignId('package_id')->constrained()->on('packages')->references('id')->cascadeOnDelete()->cascadeOnDelete();
             $table->date('start_date');
             $table->date('stop_date');
             $table->double('total_amount');

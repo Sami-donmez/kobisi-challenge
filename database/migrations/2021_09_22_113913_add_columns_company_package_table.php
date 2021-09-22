@@ -15,7 +15,7 @@ class AddColumnsCompanyPackageTable extends Migration
     {
         Schema::table('company_packages', function (Blueprint $table) {
             $table->tinyInteger('status')->comment(' 0 => bekliyor 1=> ödeme tamamlandı 2=> ödeme iptal edildi');
-            $table->foreignId('transaction_id')->nullable()->constrained()->on('company_payments')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('transaction_id')->constrained()->nullable()->on('company_payments')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

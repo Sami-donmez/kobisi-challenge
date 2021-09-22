@@ -17,7 +17,7 @@ class CompanyRegisterResource extends JsonResource
         return [
             'status'=>"ok",
             'company_id'=>$this->id,
-            'token'=>""
+            'token'=>$this->createToken('auth_token')->plainTextToken
         ];
     }
 }

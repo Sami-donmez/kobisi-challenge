@@ -6,6 +6,7 @@ use App\Http\Requests\Api\CompanyPackageRequest;
 use App\Http\Requests\Api\CompanyRegisterRequest;
 use App\Http\Resources\Api\CompanyPackageResource;
 use App\Http\Resources\Api\CompanyRegisterResource;
+use App\Http\Resources\Api\MyCompanyResource;
 use App\Jobs\PaymentJob;
 use App\Models\Company;
 use App\Models\CompanyPackage;
@@ -13,6 +14,7 @@ use App\Models\Package;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 
 class CompanyController extends ApiController
 {
@@ -25,16 +27,16 @@ class CompanyController extends ApiController
     {
        $company = new Company();
        $company->name = $request->name;
-       $company->surname = $request->surname;
+       $company->surname = $request->lastname;
        $company->email = $request->email;
        $company->password = Hash::make($request->password);
        $company->site_url = $request->site_url;
        $company->company_name = $request->company_name;
        $company->access_token = "";
+       $company->status = 1;
 
        if ($company->save()) {
-           PaymentJob::dispatch($company->id);
-           return CompanyRegisterResource::collection($company);
+           return new CompanyRegisterResource($company);
        }else{
            return $this->errorResponse('Şirket Kaydı Yapılamadı');
        }
@@ -43,7 +45,7 @@ class CompanyController extends ApiController
 
     /**
      * @param CompanyPackageRequest $request
-     * @return JsonResponse|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return CompanyPackageResource
      */
     public function addPackage(CompanyPackageRequest $request)
     {
@@ -56,15 +58,17 @@ class CompanyController extends ApiController
         $companyPackage->stop_date = Carbon::today()->addDays($days)->format('Y-m-d');
         $companyPackage->totalAmount = $package->amount;
         if ($companyPackage->save()) {
-            return  CompanyPackageResource::collection($companyPackage);
+            dispatch(new PaymentJob($companyPackage->company->id));
+            return new  CompanyPackageResource($companyPackage);
         }else{
             return $this->errorResponse('Paket Eklenemedi');
         }
 
     }
-    public function checkPackage(CompanyPackageRequest $request)
+    public function checkPackage(Request $request)
     {
-        return true;
+         $company=request()->user();
+         return new MyCompanyResource($company);
 
     }
 }

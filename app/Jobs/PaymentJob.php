@@ -65,7 +65,7 @@ class PaymentJob implements ShouldQueue
 
 
     public function payment(){
-        $hash=random_int(0,99999999999999999999999999999);
+        $hash=random_int(0 , 1000);
         return $hash % 2 == 0 ? true : false;
 
     }

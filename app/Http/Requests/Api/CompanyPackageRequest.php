@@ -13,7 +13,7 @@ class CompanyPackageRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class CompanyPackageRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'package_id'=>'required|exists:App\Models\Package,id',
+            'company_id'=>'required|exists:App\Models\Company,id'
         ];
     }
 }
